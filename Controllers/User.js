@@ -89,7 +89,7 @@ export const login = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { username } = req.body;
+  const { username } = req.body; //more fields as needed
 
   try {
     const user = await User.findById(id);
