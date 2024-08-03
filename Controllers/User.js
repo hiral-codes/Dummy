@@ -101,6 +101,7 @@ export const updateUser = async (req, res) => {
       user.username = username;
     }
     // Other Fields as needed...
+    // example
     // if (age) {
     //   user.age = age;
     // }
