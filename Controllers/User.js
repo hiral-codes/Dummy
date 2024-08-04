@@ -1,15 +1,17 @@
 import User from "../Models/user.model.js";
 import bcrypt from "bcrypt";
-import { use } from "bcrypt/promises.js";
 import jwt from "jsonwebtoken";
 
 export const createUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, firstName, lastName, mobileNo } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10); //For hashing The Password
     const user = new User({
       username,
       password: hashedPassword,
+      firstName,
+      lastName,
+      mobileNo
     });
     const SavedUser = await user.save();
     res.status(200).json(SavedUser);
@@ -18,21 +20,6 @@ export const createUser = async (req, res) => {
   }
 };
 
-// export const createUser = async (req, res) => {
-//   const { firstName, lastName, mobileNo, password } = req.body;
-//   try {
-//     const user = new User({
-//       firstName,
-//       lastName,
-//       mobileNo,
-//       password,
-//     });
-//     const savedUser = await user.save();
-//     res.status(201).json(savedUser);
-//   } catch (error) {
-//     res.status(400).json({ message: "Failed To Crteate User", error });
-//   }
-// };
 
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
@@ -89,7 +76,7 @@ export const login = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { username } = req.body; //more fields as needed
+  const { username, firstName, lastName, mobileNo } = req.body; //more fields as needed
 
   try {
     const user = await User.findById(id);
@@ -100,11 +87,15 @@ export const updateUser = async (req, res) => {
     if (username) {
       user.username = username;
     }
-    // Other Fields as needed...
-    // example
-    // if (age) {
-    //   user.age = age;
-    // }
+    if (firstName) {
+      user.firstName = firstName;
+    }
+    if (lastName) {
+      user.lastName = lastName;
+    }
+    if (mobileNo) {
+      user.mobileNo = mobileNo;
+    }
 
     const savedUser = await user.save();
     res.status(200).json({ user: savedUser, message: "User Updated successfully" });
